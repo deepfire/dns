@@ -24,6 +24,8 @@ import Data.List (dropWhileEnd)
 import Data.Monoid ((<>))
 import Network.DNS.Internal
 import Network.DNS.StateBinary
+import Debug.Trace (trace)
+import Text.Printf (printf)
 
 #if __GLASGOW_HASKELL__ < 709
 import Data.Monoid (mconcat)
@@ -34,7 +36,7 @@ import Data.Monoid (mconcat)
 -- | Composing query. First argument is a number to identify response.
 
 composeQuery :: Word16 -> [Question] -> ByteString
-composeQuery idt qs = encode qry
+composeQuery idt qs = trace (printf "'dns' composeQuery %s %s\n" (show idt) (show qs)) (encode qry)
   where
     hdr = header defaultQuery
     qry = defaultQuery {
@@ -45,7 +47,7 @@ composeQuery idt qs = encode qry
       }
 
 composeQueryAD :: Word16 -> [Question] -> ByteString
-composeQueryAD idt qs = encode qry
+composeQueryAD idt qs = trace (printf "'dns' composeQueryAD %s %s\n" (show idt) (show qs)) (encode qry)
   where
       hdr = header defaultQuery
       flg = flags hdr
